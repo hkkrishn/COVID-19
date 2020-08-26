@@ -24,10 +24,11 @@
 
 import React,{useState,useEffect} from 'react';
 import './App.css';
+import Table from './Table'
 import InfoBox from './InfoBox'
 import Map from './Map'
 import {CardContent,FormControl,Select,MenuItem, Card} from '@material-ui/core';
-
+import {sortData} from './util.js'
 const App=()=> {
   //react hook to set state
   const [countries,setCountries] = useState([])
@@ -36,6 +37,9 @@ const App=()=> {
   //preserve current selected country in state
   const [country, setCountry] = useState("Worldwide")
   const [countryInfo,setCountryInfo] = useState({})
+
+  //gather all data for the table
+  const [tableData,setTableData] = useState([])
 
 //it is possible to have more than one useEffect
   useEffect(()=>{
@@ -61,7 +65,8 @@ const App=()=> {
           {name:country.country,
             value:country.countryInfo.iso2}
         ))
-
+        const sortedData = sortData(data);
+        setTableData(sortedData);
         setCountries(countries);
       })
     }
@@ -115,7 +120,9 @@ const App=()=> {
       <Card className="app_right">
         <CardContent>
           <h3>Live Cases By Country</h3>
+          <Table countries = {tableData}/>
           <h3>Worldwide New Cases</h3>
+          <LineGraph/>
         </CardContent>
 
       </Card>
