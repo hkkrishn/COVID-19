@@ -104,10 +104,17 @@ const App=()=> {
       //All data from the country
 
       //gather center of Map
-      setCenter([data.countryInfo.lat, data.countryInfo.long])
-      setZoom(4)
+      if(countryCode === "worldwide"){
+        setCenter([34.80746,-40.4796])
+        setZoom(3)
+      } else{
+        setCenter([data.countryInfo.lat, data.countryInfo.long])
+        setZoom(4)
 
-      console.log(countryInfo)
+      }
+
+
+
     })
     console.log("COUNTRY INFO",countryInfo)
     }
@@ -118,7 +125,7 @@ const App=()=> {
     <div className="app">
       <div className="app_left">
         <div className = "app_header">
-        <h1> Mein Fuhrer COVID-19 Tracker</h1>
+        <h1>Covid-19 Stats</h1>
           <FormControl className = "app_dropdown">
               <Select
               variant = "outlined"
@@ -132,6 +139,8 @@ const App=()=> {
               </Select>
           </FormControl>
         </div>
+        <p style = {{marginBottom:"10px"}}>Stay up to date with statistics regarding corona virus deaths,recoveries and cases based by country</p>
+        <p style = {{marginBottom:"10px"}}>Harikrishnan®</p>
         <div className="app_stats">
         <InfoBox title = "Corona Virus Cases" total = {countryInfo.cases}  cases = {countryInfo.todayCases}/>
         <InfoBox title = "Recovered" total = {countryInfo.recovered} cases = {countryInfo.todayRecovered} />
