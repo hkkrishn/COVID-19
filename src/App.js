@@ -30,6 +30,7 @@ import Map from './Map'
 import {CardContent,FormControl,Select,MenuItem, Card} from '@material-ui/core';
 import {sortData} from './util.js'
 import LineGraph from './LineGraph'
+import 'leaflet/dist/leaflet.css'
 const App=()=> {
   //react hook to set state
   const [countries,setCountries] = useState([])
@@ -38,6 +39,11 @@ const App=()=> {
   //preserve current selected country in state
   const [country, setCountry] = useState("worldwide")
   const [countryInfo,setCountryInfo] = useState({})
+  const [casesType, setCasesType] = useState("cases");
+
+  //intialize center and zoom of map
+  const [mapCenter,setCenter] = useState({lat:34.80746,lng:-40.4796})
+  const [mapZoom,setZoom] = useState(3)
 
   //gather all data for the table
   const [tableData,setTableData] = useState([])
@@ -122,15 +128,15 @@ const App=()=> {
         <InfoBox title = "Deaths"  total = {countryInfo.deaths} cases = {countryInfo.todayDeaths}/>
         </div>
         <div className="app_map">
-          <Map/>
+          <Map center = {mapCenter} zoom = {mapZoom}/>
         </div>
       </div>
       <Card className="app_right">
         <CardContent>
           <h3>Live Cases By Country</h3>
           <Table countries = {tableData}/>
-          <h3>Worldwide New Cases</h3>
-          <LineGraph/>
+          <h3>Worldwide new {casesType}</h3>
+            <LineGraph casesType={casesType} />
         </CardContent>
 
       </Card>

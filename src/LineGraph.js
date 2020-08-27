@@ -9,23 +9,7 @@ import React from 'react'
 import {useState,useEffect} from 'react'
 import numeral from 'numeral'
 import {Line} from 'react-chartjs-2'
-//utility function to make data in chart.js format
-const buildChartData = (data, casesType) => {
-    let chartData = [];
-    let lastDataPoint;
-    console.log(data)
-    for (let date in data.cases) {
-      if (lastDataPoint) {
-        let newDataPoint = {
-          x: date,
-          y: data[casesType][date] - lastDataPoint,
-        };
-        chartData.push(newDataPoint);
-      }
-      lastDataPoint = data[casesType][date];
-    }
-    return chartData;
-  };
+
 
 const options = {
     legend: {
@@ -72,9 +56,27 @@ const options = {
     },
   };
 
-const LineGraph=({casesType})=> {
+const LineGraph=({casesType = "cases"})=> {
 
     const [data,setData] = useState({})
+
+    //utility function to make data in chart.js format
+const buildChartData = (data, casesType) => {
+    let chartData = [];
+    let lastDataPoint;
+    console.log(data)
+    for (let date in data.cases) {
+      if (lastDataPoint) {
+        let newDataPoint = {
+          x: date,
+          y: data[casesType][date] - lastDataPoint,
+        };
+        chartData.push(newDataPoint);
+      }
+      lastDataPoint = data[casesType][date];
+    }
+    return chartData;
+  };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -83,7 +85,7 @@ const LineGraph=({casesType})=> {
               return response.json();
             })
             .then((data) => {
-              let chartData = buildChartData(data, 'cases');
+              let chartData = buildChartData(data, casesType);
               setData(chartData);
               console.log(chartData);
               // buildChart(chartData);
@@ -91,7 +93,7 @@ const LineGraph=({casesType})=> {
         };
 
         fetchData();
-      }, []);
+      }, [casesType]);
 
 
     //utility function to arrange data in format for chart.js
