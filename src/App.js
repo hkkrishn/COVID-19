@@ -45,6 +45,9 @@ const App=()=> {
   const [mapCenter,setCenter] = useState({lat:34.80746,lng:-40.4796})
   const [mapZoom,setZoom] = useState(3)
 
+  //gather all data for countries on the Map
+  const [mapCountries, setMapCountries] = useState([])
+
   //gather all data for the table
   const [tableData,setTableData] = useState([])
 
@@ -69,11 +72,13 @@ const App=()=> {
       .then((data)=>{
         console.log(data)
         const countries = data.map((country)=>(
+
           {name:country.country,
             value:country.countryInfo.iso2}
         ))
         const sortedData = sortData(data);
         setTableData(sortedData);
+        setMapCountries(data)
         setCountries(countries);
       })
     }
@@ -95,7 +100,12 @@ const App=()=> {
     .then(data=>{
       setCountryInfo(data)
       setCountry(countryCode)
+
       //All data from the country
+
+      //gather center of Map
+      setCenter([data.countryInfo.lat, data.countryInfo.long])
+      setZoom(4)
 
       console.log(countryInfo)
     })
@@ -108,7 +118,7 @@ const App=()=> {
     <div className="app">
       <div className="app_left">
         <div className = "app_header">
-        <h1>COVID-19 Tracker</h1>
+        <h1> Mein Fuhrer COVID-19 Tracker</h1>
           <FormControl className = "app_dropdown">
               <Select
               variant = "outlined"
@@ -128,7 +138,12 @@ const App=()=> {
         <InfoBox title = "Deaths"  total = {countryInfo.deaths} cases = {countryInfo.todayDeaths}/>
         </div>
         <div className="app_map">
-          <Map center = {mapCenter} zoom = {mapZoom}/>
+        <Map
+          countries={mapCountries}
+          casesType={casesType}
+          center={mapCenter}
+          zoom={mapZoom}
+        />
         </div>
       </div>
       <Card className="app_right">
