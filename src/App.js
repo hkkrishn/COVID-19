@@ -29,13 +29,14 @@ import InfoBox from './InfoBox'
 import Map from './Map'
 import {CardContent,FormControl,Select,MenuItem, Card} from '@material-ui/core';
 import {sortData} from './util.js'
+import LineGraph from './LineGraph'
 const App=()=> {
   //react hook to set state
   const [countries,setCountries] = useState([])
 
 
   //preserve current selected country in state
-  const [country, setCountry] = useState("Worldwide")
+  const [country, setCountry] = useState("worldwide")
   const [countryInfo,setCountryInfo] = useState({})
 
   //gather all data for the table
@@ -48,7 +49,7 @@ const App=()=> {
     .then((data)=>{
       setCountryInfo(data)
     })
-  })
+  },[])
   //useEffect runs a piece of code given a certain condition
   useEffect(()=>{
     //The code here will run ONCE when the component loads and not again after
@@ -79,16 +80,23 @@ const App=()=> {
     const countryCode = e.target.value;
 
      //async code
-     const url = countryCode === "Worldwide" ? `https://disease.sh/v3/covid-19/all` : `https://disease.sh/v3/covid-19/countries/${countryCode}`
-    await fetch(url)
+     const url =countryCode === "worldwide"
+     ? "https://disease.sh/v3/covid-19/all"
+     : `https://disease.sh/v3/covid-19/countries/${countryCode}`
+    console.log(url)
+     await fetch(url)
     .then(res=>res.json())
     .then(data=>{
+      setCountryInfo(data)
       setCountry(countryCode)
       //All data from the country
-      setCountryInfo(data)
+
+      console.log(countryInfo)
     })
     console.log("COUNTRY INFO",countryInfo)
     }
+
+
 
   return (
     <div className="app">
@@ -101,9 +109,9 @@ const App=()=> {
               value = {country}
               onChange = {onCountryChange}
               >
-              <MenuItem  value = "Worldwide">Worldwide</MenuItem>
+              <MenuItem  value = "worldwide">Worldwide</MenuItem>
               {countries.map((country)=>{
-                return(<MenuItem key = {Math.random()*1000} value = {country.value}>{country.name}</MenuItem>)
+                return(<MenuItem  value = {country.value}>{country.name}</MenuItem>)
               })}
               </Select>
           </FormControl>
