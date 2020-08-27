@@ -1,5 +1,8 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+### Live Project
+The live project can be found at https://covid-stats-52852.web.app
+
 ## Available Scripts
 
 In the project directory, you can run:
