@@ -24,6 +24,8 @@
 
 import React,{useState,useEffect} from 'react';
 import './App.css';
+import numeral from 'numeral'
+import {prettyPrintStat} from './util'
 import Table from './Table'
 import InfoBox from './InfoBox'
 import Map from './Map'
@@ -142,9 +144,29 @@ const App=()=> {
         <p style = {{marginBottom:"10px"}}>Stay up to date with statistics regarding corona virus deaths,recoveries and cases based by country</p>
         <p style = {{marginBottom:"10px"}}>Harikrishnan®</p>
         <div className="app_stats">
-        <InfoBox title = "Corona Virus Cases" total = {countryInfo.cases}  cases = {countryInfo.todayCases}/>
-        <InfoBox title = "Recovered" total = {countryInfo.recovered} cases = {countryInfo.todayRecovered} />
-        <InfoBox title = "Deaths"  total = {countryInfo.deaths} cases = {countryInfo.todayDeaths}/>
+        <InfoBox
+            onClick={(e) => setCasesType("cases")}
+            title="Coronavirus Cases"
+            isRed
+            active={casesType === "cases"}
+            cases={prettyPrintStat(countryInfo.todayCases)}
+            total={numeral(countryInfo.cases).format("0.0a")}
+          />
+          <InfoBox
+            onClick={(e) => setCasesType("recovered")}
+            title="Recovered"
+            active={casesType === "recovered"}
+            cases={prettyPrintStat(countryInfo.todayRecovered)}
+            total={numeral(countryInfo.recovered).format("0.0a")}
+          />
+          <InfoBox
+            onClick={(e) => setCasesType("deaths")}
+            title="Deaths"
+            isRed
+            active={casesType === "deaths"}
+            cases={prettyPrintStat(countryInfo.todayDeaths)}
+            total={numeral(countryInfo.deaths).format("0.0a")}
+          />
         </div>
         <div className="app_map">
         <Map
@@ -159,8 +181,8 @@ const App=()=> {
         <CardContent>
           <h3>Live Cases By Country</h3>
           <Table countries = {tableData}/>
-          <h3>Worldwide new {casesType}</h3>
-            <LineGraph casesType={casesType} />
+          <h3 style = {{marginTop:"20px",marginBottom:"15px"}}>Worldwide new {casesType}</h3>
+            <LineGraph className ="app_graph" casesType={casesType} />
         </CardContent>
 
       </Card>
